@@ -817,7 +817,7 @@
         <div class="resize-handle" data-resize-target="volumePopup" title="Resize">◢</div>
     </div>
 
-    <!-- Окно 3: Темы, RGB выбор цвета обводки и кнопки -->
+    <!-- Окно 3: Темы, RGB выбор цвета фона, обводки и кнопки -->
     <div class="popup-window" id="palettePopup" style="right: 20px;">
         <div class="drag-header" data-drag-target="palettePopup">
             <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="themeTitle">🎨 Темы и дизайн</span></div>
@@ -830,8 +830,8 @@
             <button type="button" class="speed-btn" id="lightModeBtn" style="font-size:0.82rem; padding: 10px;" data-i18n="lightBtn">☀️ Светлый</button>
         </div>
 
-        <!-- 1. Фоновые темы -->
-        <div class="popup-title" style="margin-top: 4px;" data-i18n="spaceTheme">🌌 Фоновые темы / Космос</div>
+        <!-- 1. Фоновые темы (Сохранены!) -->
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="spaceTheme">🌌 Готовые темы / Космос</div>
         <select id="themeSelect" class="styled-select">
             <optgroup label="Космические темы" data-i18n-group="spaceGroup">
                 <option value="space" data-i18n="thSpace">🌌 [🟣 Космос] Звезды</option>
@@ -852,21 +852,28 @@
             </optgroup>
         </select>
 
-        <!-- 2. Пиксель / RGB выбор: Обводка Карточки -->
+        <!-- 2. RGB выбор: Цвет Фона (отдельно) -->
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="bgColorTitle">🖼️ Цвет фона (RGB)</div>
+        <div class="rgb-picker-row">
+            <span class="rgb-picker-label" data-i18n="pickBgColorText">Выбрать цвет фона</span>
+            <input type="color" id="bgColorPicker" class="rgb-color-input" value="#1e1b4b">
+        </div>
+
+        <!-- 3. RGB выбор: Обводка Карточки (отдельно) -->
         <div class="popup-title" style="margin-top: 4px;" data-i18n="cardBorderTitle">✏️ Обводка карточки (RGB)</div>
         <div class="rgb-picker-row">
             <span class="rgb-picker-label" data-i18n="pickColorText">Выбрать цвет обводки</span>
             <input type="color" id="cardBorderColorPicker" class="rgb-color-input" value="#38bdf8">
         </div>
 
-        <!-- 3. Пиксель / RGB выбор: Кнопка Бросить -->
+        <!-- 4. RGB выбор: Кнопка Бросить (отдельно) -->
         <div class="popup-title" style="margin-top: 4px;" data-i18n="rollBtnPaletteTitle">🔘 Кнопка «Бросить» (RGB)</div>
         <div class="rgb-picker-row">
             <span class="rgb-picker-label" data-i18n="pickBtnColorText">Выбрать цвет кнопки</span>
             <input type="color" id="rollBtnColorPicker" class="rgb-color-input" value="#6366f1">
         </div>
 
-        <div class="popup-title" style="margin-top: 4px;" data-i18n="customBgsTitle">🖼️ Свои файлы фона</div>
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="customBgsTitle">📁 Свои файлы фона</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <button type="button" class="speed-btn" id="uploadImgBtn" style="font-size:0.78rem; padding: 10px;" data-i18n="uploadImgBtn">🖼️ Картинка</button>
             <button type="button" class="speed-btn" id="uploadVidBtn" style="font-size:0.78rem; padding: 10px;" data-i18n="uploadVidBtn">🎬 Видео</button>
@@ -955,7 +962,7 @@
                 interfaceMode: "Режим интерфейса",
                 darkBtn: "🌙 Тёмный",
                 lightBtn: "☀️ Светлый",
-                spaceTheme: "🌌 Фоновые темы / Космос",
+                spaceTheme: "🌌 Готовые темы / Космос",
                 spaceGroup: "Космические темы",
                 thSpace: "🌌 [🟣 Космос] Звезды",
                 thSaturn: "🪐 [🟠 Сатурн] Планета",
@@ -970,11 +977,13 @@
                 thForest: "🌲 [🟢 Лес] Мох",
                 thFire: "🔥 [🔴 Огонь] Жар",
                 thGold: "✨ [🟡 Золото] Нуар",
+                bgColorTitle: "🖼️ Цвет фона (RGB)",
                 cardBorderTitle: "✏️ Обводка карточки (RGB)",
                 rollBtnPaletteTitle: "🔘 Кнопка «Бросить» (RGB)",
+                pickBgColorText: "Выбрать цвет фона",
                 pickColorText: "Выбрать цвет обводки",
                 pickBtnColorText: "Выбрать цвет кнопки",
-                customBgsTitle: "🖼️ Свои файлы фона",
+                customBgsTitle: "📁 Свои файлы фона",
                 uploadImgBtn: "🖼️ Картинка",
                 uploadVidBtn: "🎬 Видео",
                 diceCountLabel: "🎲 Количество кубиков",
@@ -1012,7 +1021,7 @@
                 interfaceMode: "Interface Mode",
                 darkBtn: "🌙 Dark",
                 lightBtn: "☀️ Light",
-                spaceTheme: "🌌 Space / Backgrounds",
+                spaceTheme: "🌌 Preset Themes / Space",
                 spaceGroup: "Space Themes",
                 thSpace: "🌌 [🟣 Space] Stars",
                 thSaturn: "🪐 [🟠 Saturn] Planet",
@@ -1027,11 +1036,13 @@
                 thForest: "🌲 [🟢 Forest] Moss",
                 thFire: "🔥 [🔴 Fire] Heat",
                 thGold: "✨ [🟡 Gold] Noir",
+                bgColorTitle: "🖼️ Background Color (RGB)",
                 cardBorderTitle: "✏️ Card Border (RGB)",
                 rollBtnPaletteTitle: "🔘 Roll Button (RGB)",
+                pickBgColorText: "Pick background color",
                 pickColorText: "Pick border color",
                 pickBtnColorText: "Pick button color",
-                customBgsTitle: "🖼️ Custom Backgrounds",
+                customBgsTitle: "📁 Custom Backgrounds",
                 uploadImgBtn: "🖼️ Image",
                 uploadVidBtn: "🎬 Video",
                 diceCountLabel: "🎲 Dice Count",
@@ -1088,6 +1099,7 @@
         const soundInput = document.getElementById('soundInput');
         const volumeRange = document.getElementById('volumeRange');
 
+        const bgColorPicker = document.getElementById('bgColorPicker');
         const cardBorderColorPicker = document.getElementById('cardBorderColorPicker');
         const rollBtnColorPicker = document.getElementById('rollBtnColorPicker');
 
@@ -1146,14 +1158,22 @@
         lightModeBtn.addEventListener('click', () => setThemeMode('light'));
         setThemeMode('dark');
 
-        // RGB / Пиксельный выбор цвета обводки карточки
+        // RGB выбор: Цвет фона
+        bgColorPicker.addEventListener('input', (e) => {
+            const hex = e.target.value;
+            bgVideo.style.display = 'none';
+            bgVideo.pause();
+            document.body.style.background = hex;
+        });
+
+        // RGB выбор: Обводка карточки
         cardBorderColorPicker.addEventListener('input', (e) => {
             const hex = e.target.value;
             document.documentElement.style.setProperty('--main-card-border', hex);
             mainCard.style.boxShadow = `0 40px 90px var(--card-shadow), 0 0 30px ${hex}`;
         });
 
-        // RGB / Пиксельный выбор цвета кнопки «Бросить»
+        // RGB выбор: Кнопка «Бросить»
         rollBtnColorPicker.addEventListener('input', (e) => {
             const hex = e.target.value;
             document.documentElement.style.setProperty('--roll-btn-bg', hex);
