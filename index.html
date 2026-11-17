@@ -817,7 +817,7 @@
         <div class="resize-handle" data-resize-target="volumePopup" title="Resize">◢</div>
     </div>
 
-    <!-- Окно 3: Темы, RGB выбор цвета фона, обводки и кнопки -->
+    <!-- Окно 3: Темы, RGB выбор -->
     <div class="popup-window" id="palettePopup" style="right: 20px;">
         <div class="drag-header" data-drag-target="palettePopup">
             <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="themeTitle">🎨 Темы и дизайн</span></div>
@@ -830,7 +830,6 @@
             <button type="button" class="speed-btn" id="lightModeBtn" style="font-size:0.82rem; padding: 10px;" data-i18n="lightBtn">☀️ Светлый</button>
         </div>
 
-        <!-- 1. Фоновые темы (Сохранены!) -->
         <div class="popup-title" style="margin-top: 4px;" data-i18n="spaceTheme">🌌 Готовые темы / Космос</div>
         <select id="themeSelect" class="styled-select">
             <optgroup label="Космические темы" data-i18n-group="spaceGroup">
@@ -852,21 +851,18 @@
             </optgroup>
         </select>
 
-        <!-- 2. RGB выбор: Цвет Фона (отдельно) -->
         <div class="popup-title" style="margin-top: 4px;" data-i18n="bgColorTitle">🖼️ Цвет фона (RGB)</div>
         <div class="rgb-picker-row">
             <span class="rgb-picker-label" data-i18n="pickBgColorText">Выбрать цвет фона</span>
             <input type="color" id="bgColorPicker" class="rgb-color-input" value="#1e1b4b">
         </div>
 
-        <!-- 3. RGB выбор: Обводка Карточки (отдельно) -->
         <div class="popup-title" style="margin-top: 4px;" data-i18n="cardBorderTitle">✏️ Обводка карточки (RGB)</div>
         <div class="rgb-picker-row">
             <span class="rgb-picker-label" data-i18n="pickColorText">Выбрать цвет обводки</span>
             <input type="color" id="cardBorderColorPicker" class="rgb-color-input" value="#38bdf8">
         </div>
 
-        <!-- 4. RGB выбор: Кнопка Бросить (отдельно) -->
         <div class="popup-title" style="margin-top: 4px;" data-i18n="rollBtnPaletteTitle">🔘 Кнопка «Бросить» (RGB)</div>
         <div class="rgb-picker-row">
             <span class="rgb-picker-label" data-i18n="pickBtnColorText">Выбрать цвет кнопки</span>
@@ -1158,7 +1154,6 @@
         lightModeBtn.addEventListener('click', () => setThemeMode('light'));
         setThemeMode('dark');
 
-        // RGB выбор: Цвет фона
         bgColorPicker.addEventListener('input', (e) => {
             const hex = e.target.value;
             bgVideo.style.display = 'none';
@@ -1166,14 +1161,12 @@
             document.body.style.background = hex;
         });
 
-        // RGB выбор: Обводка карточки
         cardBorderColorPicker.addEventListener('input', (e) => {
             const hex = e.target.value;
             document.documentElement.style.setProperty('--main-card-border', hex);
             mainCard.style.boxShadow = `0 40px 90px var(--card-shadow), 0 0 30px ${hex}`;
         });
 
-        // RGB выбор: Кнопка «Бросить»
         rollBtnColorPicker.addEventListener('input', (e) => {
             const hex = e.target.value;
             document.documentElement.style.setProperty('--roll-btn-bg', hex);
@@ -1531,6 +1524,7 @@
             }
         }
 
+        /* Улучшенная функция плавного замедления (Slow Roll с эффектом затухания скорости) */
         function rollDice(durationMs = 450) {
             currentRollId++;
             const rollId = currentRollId;
@@ -1548,57 +1542,89 @@
                 d.style.setProperty('--anim-dur', (durationMs / 1000) + 's');
             });
 
-            const intervalId = setInterval(() => {
-                if (rollId !== currentRollId) return;
-                diceElements.forEach(d => {
-                    const randColor = diceColors[Math.floor(Math.random() * diceColors.length)];
-                    d.style.backgroundColor = randColor.hex;
-                });
-            }, 70);
-            activeIntervals.push(intervalId);
+            // Если бросок медленный (например, 1600мс), делаем эффект плавного замедления интервала переключения цветов
+            if (durationMs > 500) {
+                let elapsed = 0;
+                let currentInterval = 60; // стартовая скорость смены цветов (быстро)
 
-            const timerId = setTimeout(() => {
-                if (rollId !== currentRollId) return;
-                clearInterval(intervalId);
+                function stepSlowRoll() {
+                    if (rollId !== currentRollId) return;
+                    
+                    diceElements.forEach(d => {
+                        const randColor = diceColors[Math.floor(Math.random() * diceColors.length)];
+                        d.style.backgroundColor = randColor.hex;
+                    });
 
-                const finalResults = [];
-                const animType = animSelect.value;
+                    elapsed += currentInterval;
+                    // Плавное увеличение интервала (эффект торможения рулетки)
+                    currentInterval *= 1.12;
 
-                diceElements.forEach((d) => {
-                    d.classList.remove('rolling');
-                    const colorObj = diceColors[Math.floor(Math.random() * diceColors.length)];
-                    finalResults.push(colorObj);
-
-                    d.style.backgroundColor = colorObj.hex;
-                    d.classList.remove('anim-bounce', 'anim-spin', 'anim-flip', 'anim-drop', 'anim-flash');
-                    void d.offsetWidth;
-                    d.classList.add('anim-' + animType);
-                });
-
-                currentDiceResults = finalResults;
-
-                const counts = {};
-                finalResults.forEach(c => {
-                    counts[c.hex] = (counts[c.hex] || 0) + 1;
-                });
-                let maxMatch = Math.max(...Object.values(counts));
-
-                if (maxMatch >= 4) {
-                    updateComboBannerText(true);
-                    triggerConfetti();
-                } else {
-                    updateComboBannerText(false);
+                    if (elapsed < durationMs) {
+                        let t = setTimeout(stepSlowRoll, currentInterval);
+                        activeTimers.push(t);
+                    } else {
+                        finishRoll(diceElements, rollId);
+                    }
                 }
+                stepSlowRoll();
+            } else {
+                // Обычный быстрый режим
+                const intervalId = setInterval(() => {
+                    if (rollId !== currentRollId) return;
+                    diceElements.forEach(d => {
+                        const randColor = diceColors[Math.floor(Math.random() * diceColors.length)];
+                        d.style.backgroundColor = randColor.hex;
+                    });
+                }, 70);
+                activeIntervals.push(intervalId);
 
-                addToHistory(finalResults, maxMatch >= 4);
+                const timerId = setTimeout(() => {
+                    if (rollId !== currentRollId) return;
+                    clearInterval(intervalId);
+                    finishRoll(diceElements, rollId);
+                }, durationMs);
+                activeTimers.push(timerId);
+            }
+        }
 
-            }, durationMs);
-            activeTimers.push(timerId);
+        function finishRoll(diceElements, rollId) {
+            if (rollId !== currentRollId) return;
+
+            const finalResults = [];
+            const animType = animSelect.value;
+
+            diceElements.forEach((d) => {
+                d.classList.remove('rolling');
+                const colorObj = diceColors[Math.floor(Math.random() * diceColors.length)];
+                finalResults.push(colorObj);
+
+                d.style.backgroundColor = colorObj.hex;
+                d.classList.remove('anim-bounce', 'anim-spin', 'anim-flip', 'anim-drop', 'anim-flash');
+                void d.offsetWidth;
+                d.classList.add('anim-' + animType);
+            });
+
+            currentDiceResults = finalResults;
+
+            const counts = {};
+            finalResults.forEach(c => {
+                counts[c.hex] = (counts[c.hex] || 0) + 1;
+            });
+            let maxMatch = Math.max(...Object.values(counts));
+
+            if (maxMatch >= 4) {
+                updateComboBannerText(true);
+                triggerConfetti();
+            } else {
+                updateComboBannerText(false);
+            }
+
+            addToHistory(finalResults, maxMatch >= 4);
         }
 
         rollBtn.addEventListener('click', () => rollDice(450));
         fastRollBtn.addEventListener('click', () => rollDice(200));
-        slowRollBtn.addEventListener('click', () => rollDice(900));
+        slowRollBtn.addEventListener('click', () => rollDice(1600)); // Медленный ролл теперь длится 1.6 с с плавным замедлением!
 
         function addToHistory(results, isCombo) {
             if (rollHistory.length === 0) {
