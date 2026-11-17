@@ -210,7 +210,7 @@
             display: flex;
         }
 
-        /* RGB / Пиксельный выбор цвета */
+        /* RGB выбор цвета */
         .rgb-picker-row {
             display: flex;
             align-items: center;
@@ -339,9 +339,12 @@
             transform: scale(1.1);
         }
 
-        /* Главная карточка */
+        /* Главная карточка (теперь тоже абсолютный позиционер для свободного перетаскивания) */
         .main-card {
-            position: relative;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             z-index: 20;
             width: 580px;
             min-width: 320px;
@@ -884,7 +887,7 @@
     <input type="file" id="bgVideoInput" accept="video/*">
     <input type="file" id="floatingImgInput" accept="image/*">
 
-    <!-- Главная карточка -->
+    <!-- Главная карточка (теперь тоже перемещается за шапку!) -->
     <div class="main-card" id="mainCard">
         <div class="main-drag-handle" data-drag-target="mainCard" title="Drag">
             <div class="drag-pill"></div>
@@ -1524,7 +1527,6 @@
             }
         }
 
-        /* Улучшенная функция плавного замедления (Slow Roll с эффектом затухания скорости) */
         function rollDice(durationMs = 450) {
             currentRollId++;
             const rollId = currentRollId;
@@ -1542,10 +1544,9 @@
                 d.style.setProperty('--anim-dur', (durationMs / 1000) + 's');
             });
 
-            // Если бросок медленный (например, 1600мс), делаем эффект плавного замедления интервала переключения цветов
             if (durationMs > 500) {
                 let elapsed = 0;
-                let currentInterval = 60; // стартовая скорость смены цветов (быстро)
+                let currentInterval = 60;
 
                 function stepSlowRoll() {
                     if (rollId !== currentRollId) return;
@@ -1556,7 +1557,6 @@
                     });
 
                     elapsed += currentInterval;
-                    // Плавное увеличение интервала (эффект торможения рулетки)
                     currentInterval *= 1.12;
 
                     if (elapsed < durationMs) {
@@ -1568,7 +1568,6 @@
                 }
                 stepSlowRoll();
             } else {
-                // Обычный быстрый режим
                 const intervalId = setInterval(() => {
                     if (rollId !== currentRollId) return;
                     diceElements.forEach(d => {
@@ -1624,7 +1623,7 @@
 
         rollBtn.addEventListener('click', () => rollDice(450));
         fastRollBtn.addEventListener('click', () => rollDice(200));
-        slowRollBtn.addEventListener('click', () => rollDice(1600)); // Медленный ролл теперь длится 1.6 с с плавным замедлением!
+        slowRollBtn.addEventListener('click', () => rollDice(1600));
 
         function addToHistory(results, isCombo) {
             if (rollHistory.length === 0) {
@@ -1747,6 +1746,7 @@
                 activeDrag.style.top = y + 'px';
                 activeDrag.style.right = 'auto';
                 activeDrag.style.bottom = 'auto';
+                activeDrag.style.transform = 'none'; // Сбрасываем центрирование при первом перетаскивании
             }
 
             if (activeResize) {
@@ -1763,7 +1763,15 @@
         });
 
         document.getElementById('resetPosBtn').addEventListener('click', () => {
-            [mainCard, historyPopup, volumePopup, palettePopup].forEach(el => {
+            mainCard.style.left = '50%';
+            mainCard.style.top = '50%';
+            mainCard.style.right = 'auto';
+            mainCard.style.bottom = 'auto';
+            mainCard.style.transform = 'translate(-50%, -50%)';
+            mainCard.style.width = '';
+            mainCard.style.height = '';
+
+            [historyPopup, volumePopup, palettePopup].forEach(el => {
                 el.style.left = '';
                 el.style.top = '';
                 el.style.right = '';
