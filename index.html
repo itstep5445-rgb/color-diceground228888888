@@ -141,7 +141,6 @@
             border: none;
         }
 
-        /* Новая красивая кнопка добавления картинки */
         .image-add-btn {
             background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%);
             color: #fff !important;
@@ -746,8 +745,8 @@
 
     <!-- Верхняя панель кнопок -->
     <div class="top-controls-bar">
-        <!-- Улучшенная стильная кнопка добавления картинки с иконкой и плюсом в стиле интерфейса -->
-        <button type="button" class="top-icon-btn image-add-btn" id="addFloatingImgBtn" title="Добавить картинку как новое окно">🖼️+</button>
+        <!-- Кнопка только с иконкой картинки -->
+        <button type="button" class="top-icon-btn image-add-btn" id="addFloatingImgBtn" title="Добавить картинку как новое окно">🖼️</button>
         <button type="button" class="top-icon-btn" id="langToggleBtn" title="Сменить язык / Change Language">🌐</button>
         <button type="button" class="top-icon-btn" id="resetPosBtn" title="Сбросить окна">🎯</button>
         <button type="button" class="top-icon-btn" id="historyToggleBtn" title="История бросков">📜</button>
@@ -1031,6 +1030,11 @@
             });
             updateComboBannerText(false);
             renderHistoryList();
+            
+            // Обновляем заголовок открытых окон картинок при смене языка
+            document.querySelectorAll('.floating-image-window .win-title-text').forEach(el => {
+                el.textContent = (lang === 'ru' ? '🖼️ Картинка' : '🖼️ Image');
+            });
         }
 
         const diceColors = [
@@ -1125,7 +1129,7 @@
             setLanguage(currentLang === 'ru' ? 'en' : 'ru');
         });
 
-        // Добавление кастомной картинки в виде нового плавающего окна
+        // Добавление кастомной картинки в виде нового плавающего окна (без отображения имени файла)
         addFloatingImgBtn.addEventListener('click', () => floatingImgInput.click());
 
         floatingImgInput.addEventListener('change', (e) => {
