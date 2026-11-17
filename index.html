@@ -3,52 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Dice Pro</title>
+    <title>Color Dice Pro v3.0</title>
     <style>
         :root {
-            --bg-gradient: radial-gradient(circle at center, #1e1b4b 0%, #060913 100%);
-            --card-bg: rgba(13, 18, 30, 0.88);
-            --card-border: rgba(255, 255, 255, 0.18);
-            --card-shadow: rgba(0, 0, 0, 0.85);
-            --text-main: #ffffff;
+            --bg-gradient: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #090d1f 60%, #03050a 100%);
+            --card-bg: rgba(15, 23, 42, 0.78);
+            --card-border: rgba(255, 255, 255, 0.16);
+            --card-shadow: rgba(0, 0, 0, 0.75);
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --text-credit: #64748b;
             --select-bg: rgba(30, 41, 59, 0.85);
-            --select-border: rgba(255, 255, 255, 0.16);
-            --popup-bg: rgba(13, 18, 30, 0.94);
-            --popup-border: rgba(255, 255, 255, 0.16);
-            --history-item-bg: rgba(30, 41, 59, 0.85);
-            --history-item-border: rgba(255, 255, 255, 0.12);
-            --speed-btn-bg: linear-gradient(180deg, rgba(51, 65, 85, 0.9) 0%, rgba(30, 41, 59, 0.98) 100%);
-            --speed-btn-border: rgba(255, 255, 255, 0.22);
-            --top-btn-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.96));
-            --top-btn-border: rgba(255, 255, 255, 0.18);
-            --pill-bg: rgba(255, 255, 255, 0.25);
+            --select-border: rgba(255, 255, 255, 0.14);
+            --popup-bg: rgba(13, 18, 32, 0.92);
+            --popup-border: rgba(255, 255, 255, 0.14);
+            --history-item-bg: rgba(30, 41, 59, 0.75);
+            --history-item-border: rgba(255, 255, 255, 0.1);
+            --speed-btn-bg: linear-gradient(135deg, rgba(51, 65, 85, 0.8) 0%, rgba(30, 41, 59, 0.95) 100%);
+            --speed-btn-border: rgba(255, 255, 255, 0.18);
+            --top-btn-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+            --top-btn-border: rgba(255, 255, 255, 0.16);
+            --pill-bg: rgba(255, 255, 255, 0.2);
             --dot-shadow: rgba(0, 0, 0, 0.3);
-            --dice-border: rgba(255, 255, 255, 0.95);
+            --main-card-border: rgba(255, 255, 255, 0.18);
         }
 
         [data-theme="light"] {
-            --bg-gradient: radial-gradient(circle at center, #f8fafc 0%, #cbd5e1 100%);
-            --card-bg: rgba(255, 255, 255, 0.92);
-            --card-border: rgba(0, 0, 0, 0.12);
-            --card-shadow: rgba(0, 0, 0, 0.15);
+            --bg-gradient: radial-gradient(circle at 50% 50%, #f1f5f9 0%, #cbd5e1 60%, #94a3b8 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --card-shadow: rgba(0, 0, 0, 0.12);
             --text-main: #0f172a;
             --text-muted: #475569;
             --text-credit: #64748b;
             --select-bg: rgba(241, 245, 249, 0.9);
-            --select-border: rgba(0, 0, 0, 0.15);
-            --popup-bg: rgba(255, 255, 255, 0.96);
-            --popup-border: rgba(0, 0, 0, 0.14);
+            --select-border: rgba(0, 0, 0, 0.12);
+            --popup-bg: rgba(255, 255, 255, 0.94);
+            --popup-border: rgba(0, 0, 0, 0.12);
             --history-item-bg: rgba(241, 245, 249, 0.9);
             --history-item-border: rgba(0, 0, 0, 0.08);
-            --speed-btn-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(226, 232, 240, 0.95) 100%);
-            --speed-btn-border: rgba(0, 0, 0, 0.15);
+            --speed-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(226, 232, 240, 0.95) 100%);
+            --speed-btn-border: rgba(0, 0, 0, 0.12);
             --top-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(226, 232, 240, 0.9));
-            --top-btn-border: rgba(0, 0, 0, 0.15);
-            --pill-bg: rgba(0, 0, 0, 0.2);
-            --dot-shadow: rgba(0, 0, 0, 0.15);
-            --dice-border: rgba(15, 23, 42, 0.85);
+            --top-btn-border: rgba(0, 0, 0, 0.12);
+            --pill-bg: rgba(0, 0, 0, 0.15);
+            --dot-shadow: rgba(0, 0, 0, 0.1);
+            --main-card-border: rgba(0, 0, 0, 0.14);
         }
 
         * {
@@ -106,18 +106,18 @@
         }
 
         .top-icon-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 18px;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
             background: var(--top-btn-bg);
             border: 1px solid var(--top-btn-border);
-            border-bottom: 3px solid rgba(0, 0, 0, 0.3);
+            border-bottom: 3px solid rgba(0, 0, 0, 0.25);
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             backdrop-filter: blur(16px);
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             user-select: none;
@@ -127,7 +127,7 @@
         .top-icon-btn:hover {
             transform: translateY(-3px) scale(1.08);
             border-color: rgba(56, 189, 248, 0.8);
-            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.3);
+            box-shadow: 0 12px 25px rgba(56, 189, 248, 0.3);
         }
 
         .top-icon-btn:active {
@@ -138,6 +138,13 @@
         .palette-btn {
             background: linear-gradient(135deg, #ef4444, #3b82f6, #a855f7, #22c55e);
             color: #fff !important;
+            border: none;
+        }
+
+        .image-add-btn {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: #fff !important;
+            border: none;
         }
 
         .resize-handle {
@@ -171,14 +178,14 @@
             right: 20px;
             background: var(--popup-bg);
             border: 1px solid var(--popup-border);
-            border-radius: 22px;
-            padding: 16px 18px 22px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 16px 18px 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(24px);
             display: none;
             flex-direction: column;
             gap: 12px;
-            width: 310px;
+            width: 300px;
             min-width: 240px;
             min-height: 180px;
             max-width: 92vw;
@@ -192,12 +199,44 @@
             display: flex;
         }
 
+        /* Плавающие окна для пользовательских картинок */
+        .floating-image-window {
+            position: fixed;
+            top: 150px;
+            left: 50px;
+            background: var(--popup-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 20px;
+            padding: 12px 14px 16px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 280px;
+            height: 280px;
+            z-index: 55;
+            overflow: hidden;
+            resize: both;
+        }
+
+        .floating-img-content {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            user-select: none;
+            pointer-events: none;
+        }
+
         .drag-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: grab;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             border-bottom: 1px solid var(--popup-border);
             user-select: none;
             touch-action: none;
@@ -209,7 +248,7 @@
         }
 
         .popup-title {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -228,11 +267,11 @@
             background: var(--select-bg);
             border: 1px solid var(--select-border);
             color: var(--text-main);
-            width: 28px;
-            height: 28px;
-            border-radius: 10px;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -256,21 +295,21 @@
             max-width: 95vw;
             max-height: 92vh;
             background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            border: 2.5px solid var(--main-card-border);
             border-radius: 36px;
             padding: 24px 32px 30px;
             box-shadow: 0 35px 80px var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: box-shadow 0.4s ease, border-color 0.4s ease, background 0.3s ease;
+            transition: box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
         }
 
         .main-card.jackpot-glow {
-            border-color: #facc15;
+            border-color: #facc15 !important;
             box-shadow: 0 0 70px rgba(250, 204, 21, 0.6), inset 0 0 30px rgba(250, 204, 21, 0.3);
         }
 
@@ -421,14 +460,14 @@
             width: var(--dice-size, 82px);
             height: var(--dice-size, 82px);
             border-radius: 24%;
-            border: var(--dice-border-width, 3px) solid var(--dice-border);
+            border: 3px solid rgba(255, 255, 255, 0.95);
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 15px 32px rgba(0, 0, 0, 0.35), inset 0 3px 8px rgba(255, 255, 255, 0.45);
             position: relative;
             user-select: none;
-            transition: background-color 0.07s linear, transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            transition: background-color 0.07s linear, transform 0.18s ease, box-shadow 0.2s ease;
             animation-duration: var(--anim-dur, 0.45s);
             animation-fill-mode: both;
         }
@@ -693,6 +732,7 @@
 
     <!-- Верхняя панель кнопок -->
     <div class="top-controls-bar">
+        <button type="button" class="top-icon-btn image-add-btn" id="addFloatingImgBtn" title="Добавить картинку как новое окно">🖼️ (+)</button>
         <button type="button" class="top-icon-btn" id="langToggleBtn" title="Сменить язык / Change Language">🌐</button>
         <button type="button" class="top-icon-btn" id="resetPosBtn" title="Сбросить окна">🎯</button>
         <button type="button" class="top-icon-btn" id="historyToggleBtn" title="История бросков">📜</button>
@@ -700,8 +740,11 @@
         <button type="button" class="top-icon-btn palette-btn" id="paletteToggleBtn" title="Палитра тем и фонов">🎨</button>
     </div>
 
+    <!-- Контейнер для плавающих окон с картинками -->
+    <div id="floatingWindowsContainer"></div>
+
     <!-- Окно 1: История бросков -->
-    <div class="popup-window" id="historyPopup" style="right: 202px;">
+    <div class="popup-window" id="historyPopup" style="right: 262px;">
         <div class="drag-header" data-drag-target="historyPopup">
             <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="histTitle">📜 История бросков</span></div>
             <button type="button" class="close-popup-btn" data-close="historyPopup">✕</button>
@@ -714,7 +757,7 @@
     </div>
 
     <!-- Окно 2: Звук и громкость -->
-    <div class="popup-window" id="volumePopup" style="right: 140px;">
+    <div class="popup-window" id="volumePopup" style="right: 200px;">
         <div class="drag-header" data-drag-target="volumePopup">
             <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="soundTitle">🔊 Звук и микшер</span></div>
             <button type="button" class="close-popup-btn" data-close="volumePopup">✕</button>
@@ -740,7 +783,7 @@
         <div class="resize-handle" data-resize-target="volumePopup" title="Resize">◢</div>
     </div>
 
-    <!-- Окно 3: Палитра, Темы, Обводка и Свои фоны -->
+    <!-- Окно 3: Палитра, Темы, Обводка карточки и Свои фоны -->
     <div class="popup-window" id="palettePopup" style="right: 20px;">
         <div class="drag-header" data-drag-target="palettePopup">
             <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="themeTitle">🎨 Темы и фон</span></div>
@@ -774,17 +817,17 @@
             </optgroup>
         </select>
 
-        <div class="popup-title" style="margin-top: 4px;" data-i18n="borderTitle">✏️ Обводка кубиков</div>
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="cardBorderTitle">✏️ Обводка карточки (Color Dice)</div>
         <div class="border-colors-grid">
-            <div class="border-color-opt" style="background: #ffffff;" data-color="#ffffff" title="Белый"></div>
+            <div class="border-color-opt" style="background: rgba(255,255,255,0.3);" data-color="rgba(255,255,255,0.2)" title="Стандарт"></div>
             <div class="border-color-opt" style="background: #38bdf8;" data-color="#38bdf8" title="Голубой"></div>
             <div class="border-color-opt" style="background: #facc15;" data-color="#facc15" title="Желтый"></div>
             <div class="border-color-opt" style="background: #ef4444;" data-color="#ef4444" title="Красный"></div>
             <div class="border-color-opt" style="background: #a855f7;" data-color="#a855f7" title="Фиолетовый"></div>
-            <div class="border-color-opt" style="background: #0f172a;" data-color="#0f172a" title="Темный"></div>
+            <div class="border-color-opt" style="background: #22c55e;" data-color="#22c55e" title="Зеленый"></div>
         </div>
 
-        <div class="popup-title" style="margin-top: 4px;" data-i18n="customBgsTitle">🖼️ Свои фоны</div>
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="customBgsTitle">🖼️ Фоны сайта</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <button type="button" class="speed-btn" id="uploadImgBtn" style="font-size:0.78rem; padding: 10px;" data-i18n="uploadImgBtn">🖼️ Картинка</button>
             <button type="button" class="speed-btn" id="uploadVidBtn" style="font-size:0.78rem; padding: 10px;" data-i18n="uploadVidBtn">🎬 Видео</button>
@@ -797,6 +840,7 @@
     <input type="file" id="soundInput" accept="audio/*">
     <input type="file" id="bgImageInput" accept="image/*">
     <input type="file" id="bgVideoInput" accept="video/*">
+    <input type="file" id="floatingImgInput" accept="image/*">
 
     <!-- Главная карточка -->
     <div class="main-card" id="mainCard">
@@ -888,8 +932,8 @@
                 thForest: "🌲 [🟢 Лес] Мох",
                 thFire: "🔥 [🔴 Огонь] Жар",
                 thGold: "✨ [🟡 Золото] Нуар",
-                borderTitle: "✏️ Обводка кубиков",
-                customBgsTitle: "🖼️ Свои фоны",
+                cardBorderTitle: "✏️ Обводка карточки (Color Dice)",
+                customBgsTitle: "🖼️ Фоны сайта",
                 uploadImgBtn: "🖼️ Картинка",
                 uploadVidBtn: "🎬 Видео",
                 diceCountLabel: "🎲 Количество кубиков",
@@ -904,6 +948,7 @@
                 rollBtnText: "🎲 БРОСИТЬ !",
                 fastBtn: "⚡ Быстро",
                 slowBtn: "🐢 Медленно",
+                winTitle: "🖼️ Окно картинки"
             },
             en: {
                 histTitle: "📜 Roll History",
@@ -941,8 +986,8 @@
                 thForest: "🌲 [🟢 Forest] Moss",
                 thFire: "🔥 [🔴 Fire] Heat",
                 thGold: "✨ [🟡 Gold] Noir",
-                borderTitle: "✏️ Dice Border",
-                customBgsTitle: "🖼️ Custom Backgrounds",
+                cardBorderTitle: "✏️ Card Border (Color Dice)",
+                customBgsTitle: "🖼️ Site Backgrounds",
                 uploadImgBtn: "🖼️ Image",
                 uploadVidBtn: "🎬 Video",
                 diceCountLabel: "🎲 Dice Count",
@@ -957,6 +1002,7 @@
                 rollBtnText: "🎲 ROLL !",
                 fastBtn: "⚡ Fast",
                 slowBtn: "🐢 Slow",
+                winTitle: "🖼️ Image Window"
             }
         };
 
@@ -1014,6 +1060,10 @@
         const uploadImgBtn = document.getElementById('uploadImgBtn');
         const uploadVidBtn = document.getElementById('uploadVidBtn');
 
+        const addFloatingImgBtn = document.getElementById('addFloatingImgBtn');
+        const floatingImgInput = document.getElementById('floatingImgInput');
+        const floatingWindowsContainer = document.getElementById('floatingWindowsContainer');
+
         const canvas = document.getElementById('confettiCanvas');
         const ctx = canvas.getContext('2d');
         let confettiParticles = [];
@@ -1046,12 +1096,12 @@
         lightModeBtn.addEventListener('click', () => setThemeMode('light'));
         setThemeMode('dark');
 
-        // Смена обводки кубиков
+        // Смена обводки главной карточки (Color Dice)
         document.querySelectorAll('.border-color-opt').forEach(opt => {
             opt.addEventListener('click', (e) => {
                 const color = e.target.getAttribute('data-color');
-                document.documentElement.style.setProperty('--dice-border', color);
-                document.documentElement.style.setProperty('--dice-border-width', '3.5px');
+                document.documentElement.style.setProperty('--main-card-border', color);
+                mainCard.style.boxShadow = `0 35px 80px var(--card-shadow), 0 0 25px ${color}`;
             });
         });
 
@@ -1060,15 +1110,50 @@
             setLanguage(currentLang === 'ru' ? 'en' : 'ru');
         });
 
+        // Добавление кастомной картинки в виде нового плавающего окна
+        addFloatingImgBtn.addEventListener('click', () => floatingImgInput.click());
+
+        floatingImgInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                createFloatingImageWindow(url, file.name);
+                floatingImgInput.value = '';
+            }
+        });
+
+        function createFloatingImageWindow(imgUrl, titleName) {
+            topZIndex++;
+            const win = document.createElement('div');
+            win.className = 'floating-image-window';
+            win.style.zIndex = topZIndex;
+            win.style.top = (120 + (Math.random() * 60)) + 'px';
+            win.style.left = (100 + (Math.random() * 120)) + 'px';
+
+            win.innerHTML = `
+                <div class="drag-header" data-drag-target-el>
+                    <div class="popup-title"><span class="drag-dots">⋮⋮</span> ${titleName || '🖼️ Картинка'}</div>
+                    <button type="button" class="close-popup-btn">✕</button>
+                </div>
+                <img src="${imgUrl}" class="floating-img-content" alt="Custom image">
+            `;
+
+            win.querySelector('.close-popup-btn').addEventListener('click', () => {
+                win.remove();
+            });
+
+            floatingWindowsContainer.appendChild(win);
+        }
+
         // Управление фоновыми темами
         const themesConfig = {
-            space: 'radial-gradient(circle at center, #1e1b4b 0%, #060913 100%)',
-            saturn: 'radial-gradient(circle at center, #7c2d12 0%, #180902 100%)',
-            neptune: 'radial-gradient(circle at center, #0c4a6e 0%, #020617 100%)',
-            cyber: 'radial-gradient(circle at center, #4c1d95 0%, #090214 100%)',
-            neon: 'radial-gradient(circle at center, #065f46 0%, #02140d 100%)',
-            cyberarctic: 'radial-gradient(circle at center, #0e7490 0%, #020b14 100%)',
-            pinkneon: 'radial-gradient(circle at center, #831843 0%, #14020a 100%)',
+            space: 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #090d1f 60%, #03050a 100%)',
+            saturn: 'radial-gradient(circle at 50% 50%, #7c2d12 0%, #180902 60%, #080301 100%)',
+            neptune: 'radial-gradient(circle at 50% 50%, #0c4a6e 0%, #020617 60%, #010205 100%)',
+            cyber: 'radial-gradient(circle at 50% 50%, #4c1d95 0%, #090214 60%, #030108 100%)',
+            neon: 'radial-gradient(circle at 50% 50%, #065f46 0%, #02140d 100%)',
+            cyberarctic: 'radial-gradient(circle at 50% 50%, #0e7490 0%, #020b14 100%)',
+            pinkneon: 'radial-gradient(circle at 50% 50%, #831843 0%, #14020a 100%)',
             sunset: 'linear-gradient(135deg, #c2410c 0%, #7c2d12 50%, #1e1b4b 100%)',
             forest: 'linear-gradient(135deg, #14532d 0%, #064e3b 50%, #022c22 100%)',
             fire: 'linear-gradient(135deg, #991b1b 0%, #7c2d12 50%, #450a0a 100%)',
@@ -1088,7 +1173,6 @@
         themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
         applyTheme('space');
 
-        // Кнопки загрузки файлов фонов
         uploadImgBtn.addEventListener('click', () => bgImageInput.click());
         uploadVidBtn.addEventListener('click', () => bgVideoInput.click());
 
@@ -1522,28 +1606,30 @@
 
         document.querySelectorAll('.close-popup-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const targetId = e.target.getAttribute('data-close');
-                document.getElementById(targetId).classList.remove('open');
+                const popupWin = e.target.closest('.popup-window');
+                if (popupWin) popupWin.classList.remove('open');
             });
         });
 
-        // Перетаскивание (Drag & Drop) и Изменение размера (Resize)
+        // Универсальное перетаскивание (Drag & Drop) и Изменение размера (Resize)
         let activeDrag = null;
         let dragOffset = { x: 0, y: 0 };
         let activeResize = null;
         let resizeStart = { w: 0, h: 0, x: 0, y: 0 };
 
         document.addEventListener('mousedown', (e) => {
-            const dragHeader = e.target.closest('[data-drag-target]');
+            const dragHeader = e.target.closest('[data-drag-target], .drag-header');
             if (dragHeader) {
-                const targetId = dragHeader.getAttribute('data-drag-target');
-                activeDrag = document.getElementById(targetId);
-                topZIndex++;
-                activeDrag.style.zIndex = topZIndex;
-                const rect = activeDrag.getBoundingClientRect();
-                dragOffset.x = e.clientX - rect.left;
-                dragOffset.y = e.clientY - rect.top;
-                e.preventDefault();
+                const targetWindow = dragHeader.closest('.popup-window, .floating-image-window, .main-card');
+                if (targetWindow) {
+                    activeDrag = targetWindow;
+                    topZIndex++;
+                    activeDrag.style.zIndex = topZIndex;
+                    const rect = activeDrag.getBoundingClientRect();
+                    dragOffset.x = e.clientX - rect.left;
+                    dragOffset.y = e.clientY - rect.top;
+                    e.preventDefault();
+                }
             }
 
             const resizeHandle = e.target.closest('[data-resize-target]');
@@ -1594,8 +1680,8 @@
                 el.style.width = '';
                 el.style.height = '';
             });
-            historyPopup.style.right = '202px';
-            volumePopup.style.right = '140px';
+            historyPopup.style.right = '262px';
+            volumePopup.style.right = '200px';
             palettePopup.style.right = '20px';
         });
 
