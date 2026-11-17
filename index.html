@@ -141,10 +141,18 @@
             border: none;
         }
 
+        /* Новая красивая кнопка добавления картинки */
         .image-add-btn {
-            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%);
             color: #fff !important;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 8px 22px rgba(6, 182, 212, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .image-add-btn:hover {
+            background: linear-gradient(135deg, #22d3ee 0%, #60a5fa 50%, #818cf8 100%);
+            box-shadow: 0 12px 28px rgba(6, 182, 212, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+            border-color: #ffffff;
         }
 
         .resize-handle {
@@ -218,6 +226,12 @@
             z-index: 55;
             overflow: hidden;
             resize: both;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .floating-image-window:hover {
+            transform: scale(1.01);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 20px rgba(56, 189, 248, 0.2);
         }
 
         .floating-img-content {
@@ -732,7 +746,8 @@
 
     <!-- Верхняя панель кнопок -->
     <div class="top-controls-bar">
-        <button type="button" class="top-icon-btn image-add-btn" id="addFloatingImgBtn" title="Добавить картинку как новое окно">🖼️ (+)</button>
+        <!-- Улучшенная стильная кнопка добавления картинки с иконкой и плюсом в стиле интерфейса -->
+        <button type="button" class="top-icon-btn image-add-btn" id="addFloatingImgBtn" title="Добавить картинку как новое окно">🖼️+</button>
         <button type="button" class="top-icon-btn" id="langToggleBtn" title="Сменить язык / Change Language">🌐</button>
         <button type="button" class="top-icon-btn" id="resetPosBtn" title="Сбросить окна">🎯</button>
         <button type="button" class="top-icon-btn" id="historyToggleBtn" title="История бросков">📜</button>
@@ -948,7 +963,7 @@
                 rollBtnText: "🎲 БРОСИТЬ !",
                 fastBtn: "⚡ Быстро",
                 slowBtn: "🐢 Медленно",
-                winTitle: "🖼️ Окно картинки"
+                winTitle: "🖼️ Картинка"
             },
             en: {
                 histTitle: "📜 Roll History",
@@ -1002,7 +1017,7 @@
                 rollBtnText: "🎲 ROLL !",
                 fastBtn: "⚡ Fast",
                 slowBtn: "🐢 Slow",
-                winTitle: "🖼️ Image Window"
+                winTitle: "🖼️ Image"
             }
         };
 
@@ -1117,12 +1132,12 @@
             const file = e.target.files[0];
             if (file) {
                 const url = URL.createObjectURL(file);
-                createFloatingImageWindow(url, file.name);
+                createFloatingImageWindow(url);
                 floatingImgInput.value = '';
             }
         });
 
-        function createFloatingImageWindow(imgUrl, titleName) {
+        function createFloatingImageWindow(imgUrl) {
             topZIndex++;
             const win = document.createElement('div');
             win.className = 'floating-image-window';
@@ -1130,9 +1145,11 @@
             win.style.top = (120 + (Math.random() * 60)) + 'px';
             win.style.left = (100 + (Math.random() * 120)) + 'px';
 
+            const titleText = currentLang === 'ru' ? '🖼️ Картинка' : '🖼️ Image';
+
             win.innerHTML = `
                 <div class="drag-header" data-drag-target-el>
-                    <div class="popup-title"><span class="drag-dots">⋮⋮</span> ${titleName || '🖼️ Картинка'}</div>
+                    <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span class="win-title-text">${titleText}</span></div>
                     <button type="button" class="close-popup-btn">✕</button>
                 </div>
                 <img src="${imgUrl}" class="floating-img-content" alt="Custom image">
