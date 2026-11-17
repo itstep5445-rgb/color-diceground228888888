@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Dice Pro</title>
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at center, #1e1b4b 0%, #060913 100%);
+            --card-bg: rgba(13, 18, 30, 0.88);
+            --card-border: rgba(255, 255, 255, 0.18);
+            --card-shadow: rgba(0, 0, 0, 0.85);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --text-credit: #64748b;
+            --select-bg: rgba(30, 41, 59, 0.85);
+            --select-border: rgba(255, 255, 255, 0.16);
+            --popup-bg: rgba(13, 18, 30, 0.94);
+            --popup-border: rgba(255, 255, 255, 0.16);
+            --history-item-bg: rgba(30, 41, 59, 0.85);
+            --history-item-border: rgba(255, 255, 255, 0.12);
+            --speed-btn-bg: linear-gradient(180deg, rgba(51, 65, 85, 0.9) 0%, rgba(30, 41, 59, 0.98) 100%);
+            --speed-btn-border: rgba(255, 255, 255, 0.22);
+            --top-btn-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.96));
+            --top-btn-border: rgba(255, 255, 255, 0.18);
+            --pill-bg: rgba(255, 255, 255, 0.25);
+            --dot-shadow: rgba(0, 0, 0, 0.3);
+            --dice-border: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="light"] {
+            --bg-gradient: radial-gradient(circle at center, #f8fafc 0%, #cbd5e1 100%);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-border: rgba(0, 0, 0, 0.12);
+            --card-shadow: rgba(0, 0, 0, 0.15);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-credit: #64748b;
+            --select-bg: rgba(241, 245, 249, 0.9);
+            --select-border: rgba(0, 0, 0, 0.15);
+            --popup-bg: rgba(255, 255, 255, 0.96);
+            --popup-border: rgba(0, 0, 0, 0.14);
+            --history-item-bg: rgba(241, 245, 249, 0.9);
+            --history-item-border: rgba(0, 0, 0, 0.08);
+            --speed-btn-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(226, 232, 240, 0.95) 100%);
+            --speed-btn-border: rgba(0, 0, 0, 0.15);
+            --top-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(226, 232, 240, 0.9));
+            --top-btn-border: rgba(0, 0, 0, 0.15);
+            --pill-bg: rgba(0, 0, 0, 0.2);
+            --dot-shadow: rgba(0, 0, 0, 0.15);
+            --dice-border: rgba(15, 23, 42, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            width: 100vw;
+            background: var(--bg-gradient);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-main);
+            transition: background 0.4s ease, color 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #bgVideo {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            display: none;
+        }
+
+        #confettiCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Верхняя панель кнопок */
+        .top-controls-bar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .top-icon-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 18px;
+            background: var(--top-btn-bg);
+            border: 1px solid var(--top-btn-border);
+            border-bottom: 3px solid rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            backdrop-filter: blur(16px);
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            color: var(--text-main);
+        }
+
+        .top-icon-btn:hover {
+            transform: translateY(-3px) scale(1.08);
+            border-color: rgba(56, 189, 248, 0.8);
+            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.3);
+        }
+
+        .top-icon-btn:active {
+            transform: translateY(2px) scale(0.95);
+            border-bottom-width: 1px;
+        }
+
+        .palette-btn {
+            background: linear-gradient(135deg, #ef4444, #3b82f6, #a855f7, #22c55e);
+            color: #fff !important;
+        }
+
+        .resize-handle {
+            position: absolute;
+            right: 4px;
+            bottom: 4px;
+            width: 24px;
+            height: 24px;
+            cursor: nwse-resize;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 4px;
+            color: var(--text-muted);
+            font-size: 12px;
+            user-select: none;
+            touch-action: none;
+            z-index: 30;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .resize-handle:hover {
+            color: #38bdf8;
+            transform: scale(1.2);
+        }
+
+        /* Всплывающие окна */
+        .popup-window {
+            position: fixed;
+            top: 84px;
+            right: 20px;
+            background: var(--popup-bg);
+            border: 1px solid var(--popup-border);
+            border-radius: 22px;
+            padding: 16px 18px 22px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            width: 310px;
+            min-width: 240px;
+            min-height: 180px;
+            max-width: 92vw;
+            max-height: 85vh;
+            text-align: left;
+            z-index: 60;
+            overflow-y: auto;
+        }
+
+        .popup-window.open {
+            display: flex;
+        }
+
+        .drag-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: grab;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--popup-border);
+            user-select: none;
+            touch-action: none;
+            flex-shrink: 0;
+        }
+
+        .drag-header:active {
+            cursor: grabbing;
+        }
+
+        .popup-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .drag-dots {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .close-popup-btn {
+            background: var(--select-bg);
+            border: 1px solid var(--select-border);
+            color: var(--text-main);
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .close-popup-btn:hover {
+            background: #ef4444;
+            border-color: #f87171;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        /* Главная карточка */
+        .main-card {
+            position: relative;
+            z-index: 20;
+            width: 580px;
+            min-width: 320px;
+            min-height: 380px;
+            max-width: 95vw;
+            max-height: 92vh;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 36px;
+            padding: 24px 32px 30px;
+            box-shadow: 0 35px 80px var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: box-shadow 0.4s ease, border-color 0.4s ease, background 0.3s ease;
+        }
+
+        .main-card.jackpot-glow {
+            border-color: #facc15;
+            box-shadow: 0 0 70px rgba(250, 204, 21, 0.6), inset 0 0 30px rgba(250, 204, 21, 0.3);
+        }
+
+        .main-drag-handle {
+            width: 100%;
+            cursor: grab;
+            padding: 2px 0 6px;
+            user-select: none;
+            touch-action: none;
+            flex-shrink: 0;
+        }
+
+        .main-drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .drag-pill {
+            width: 52px;
+            height: 5px;
+            background: var(--pill-bg);
+            border-radius: 99px;
+            margin: 0 auto 12px;
+            transition: background 0.2s, width 0.2s;
+        }
+
+        .main-drag-handle:hover .drag-pill {
+            background: #38bdf8;
+            width: 72px;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+            letter-spacing: 0.8px;
+            background: linear-gradient(180deg, var(--text-main) 0%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            font-size: 2.2rem;
+            -webkit-text-fill-color: initial;
+            filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.5));
+        }
+
+        .top-credit {
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-credit);
+            margin-bottom: 16px;
+        }
+
+        .top-credit a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+
+        .top-credit a:hover {
+            text-decoration: underline;
+        }
+
+        .settings-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            gap: 6px;
+        }
+
+        .control-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding-left: 2px;
+        }
+
+        .styled-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: var(--select-bg);
+            color: var(--text-main);
+            border: 1px solid var(--select-border);
+            border-radius: 16px;
+            padding: 11px 32px 11px 14px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 14px;
+        }
+
+        .styled-select:hover, .styled-select:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+        }
+
+        .combo-banner {
+            min-height: 24px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-top: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .combo-banner.win {
+            color: #facc15;
+            text-shadow: 0 0 15px rgba(250, 204, 21, 0.7);
+            transform: scale(1.06);
+        }
+
+        /* Арена кубиков */
+        .dice-arena {
+            flex: 1;
+            min-height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin: 14px 0;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .dice {
+            width: var(--dice-size, 82px);
+            height: var(--dice-size, 82px);
+            border-radius: 24%;
+            border: var(--dice-border-width, 3px) solid var(--dice-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 32px rgba(0, 0, 0, 0.35), inset 0 3px 8px rgba(255, 255, 255, 0.45);
+            position: relative;
+            user-select: none;
+            transition: background-color 0.07s linear, transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            animation-duration: var(--anim-dur, 0.45s);
+            animation-fill-mode: both;
+        }
+
+        .dice.rolling {
+            animation: diceShake 0.13s infinite alternate ease-in-out;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes diceShake {
+            0% { transform: scale(0.95) rotate(-6deg); }
+            100% { transform: scale(1.05) rotate(6deg); }
+        }
+
+        .dice-dot {
+            width: 22%;
+            height: 22%;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 3px 6px var(--dot-shadow);
+        }
+
+        /* Анимации финиша */
+        .anim-bounce { animation-name: animBounce; animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes animBounce {
+            0% { transform: scale(0.5) rotate(-15deg); }
+            65% { transform: scale(1.15) rotate(4deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .anim-spin { animation-name: animSpin; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes animSpin {
+            0% { transform: scale(0.4) rotate(-360deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .anim-flip { animation-name: animFlip; animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes animFlip {
+            0% { transform: perspective(400px) rotateY(180deg) scale(0.6); }
+            100% { transform: perspective(400px) rotateY(0deg) scale(1); }
+        }
+
+        .anim-drop { animation-name: animDrop; animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes animDrop {
+            0% { transform: translateY(-40px) scale(0.8); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .anim-flash { animation-name: animFlash; animation-timing-function: ease-out; }
+        @keyframes animFlash {
+            0% { transform: scale(1.35); filter: brightness(2.5); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+
+        /* Кнопки управления */
+        .buttons-wrapper {
+            flex-shrink: 0;
+        }
+
+        #rollBtn {
+            width: 100%;
+            padding: 17px;
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-bottom: 5px solid rgba(25, 22, 60, 0.9);
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 15px 32px rgba(99, 102, 241, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.45);
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.14s ease, filter 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #rollBtn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+            transition: left 0.6s ease;
+        }
+
+        #rollBtn:hover::after {
+            left: 140%;
+        }
+
+        #rollBtn:hover {
+            filter: brightness(1.12);
+            transform: translateY(-2px);
+            box-shadow: 0 18px 38px rgba(99, 102, 241, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.55);
+        }
+
+        #rollBtn:active {
+            transform: translateY(3px) scale(0.98);
+            border-bottom-width: 1px;
+        }
+
+        .speed-buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .speed-btn {
+            padding: 13px 16px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-main);
+            background: var(--speed-btn-bg);
+            border: 1px solid var(--speed-btn-border);
+            border-bottom: 3.5px solid rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.16s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .speed-btn:hover {
+            border-color: rgba(56, 189, 248, 0.75);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(56, 189, 248, 0.2);
+        }
+
+        .speed-btn:active {
+            transform: translateY(2px) scale(0.97);
+            border-bottom-width: 1px;
+        }
+
+        .btn-active-mode {
+            border-color: #38bdf8 !important;
+            background: linear-gradient(180deg, rgba(14, 165, 233, 0.4) 0%, rgba(30, 41, 59, 0.98) 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.6) !important;
+        }
+
+        /* История бросков */
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            padding-right: 4px;
+        }
+
+        .history-item {
+            background: var(--history-item-bg);
+            border: 1px solid var(--history-item-border);
+            border-radius: 12px;
+            padding: 9px 12px;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-item.combo-hit {
+            border-color: rgba(250, 204, 21, 0.6);
+            background: rgba(250, 204, 21, 0.12);
+        }
+
+        .history-colors {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .history-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .history-badge {
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+            background: var(--select-bg);
+            color: var(--text-main);
+        }
+
+        .clear-history-btn {
+            background: linear-gradient(180deg, rgba(239, 68, 68, 0.32), rgba(185, 28, 28, 0.45));
+            border: 1px solid rgba(239, 68, 68, 0.55);
+            color: #fecaca;
+            border-radius: 12px;
+            padding: 9px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .clear-history-btn:hover {
+            background: rgba(239, 68, 68, 0.6);
+            color: #fff;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: rgba(150, 150, 150, 0.25);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+        }
+
+        .border-colors-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .border-color-opt {
+            height: 28px;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+
+        .border-color-opt:hover {
+            transform: scale(1.1);
+            border-color: #fff;
+        }
+
+        input[type="file"] { display: none; }
+    </style>
+</head>
+<body>
+
+    <video id="bgVideo" autoplay loop muted playsinline></video>
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Верхняя панель кнопок -->
+    <div class="top-controls-bar">
+        <button type="button" class="top-icon-btn" id="langToggleBtn" title="Сменить язык / Change Language">🌐</button>
+        <button type="button" class="top-icon-btn" id="resetPosBtn" title="Сбросить окна">🎯</button>
+        <button type="button" class="top-icon-btn" id="historyToggleBtn" title="История бросков">📜</button>
+        <button type="button" class="top-icon-btn" id="volumeToggleBtn" title="Звуки и громкость">🔊</button>
+        <button type="button" class="top-icon-btn palette-btn" id="paletteToggleBtn" title="Палитра тем и фонов">🎨</button>
+    </div>
+
+    <!-- Окно 1: История бросков -->
+    <div class="popup-window" id="historyPopup" style="right: 202px;">
+        <div class="drag-header" data-drag-target="historyPopup">
+            <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="histTitle">📜 История бросков</span></div>
+            <button type="button" class="close-popup-btn" data-close="historyPopup">✕</button>
+        </div>
+        <div class="history-list" id="historyList">
+            <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 10px;" data-i18n="histEmpty">Бросков еще не было</div>
+        </div>
+        <button type="button" class="clear-history-btn" id="clearHistoryBtn" data-i18n="clearHist">Очистить историю</button>
+        <div class="resize-handle" data-resize-target="historyPopup" title="Resize">◢</div>
+    </div>
+
+    <!-- Окно 2: Звук и громкость -->
+    <div class="popup-window" id="volumePopup" style="right: 140px;">
+        <div class="drag-header" data-drag-target="volumePopup">
+            <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="soundTitle">🔊 Звук и микшер</span></div>
+            <button type="button" class="close-popup-btn" data-close="volumePopup">✕</button>
+        </div>
+        <div class="popup-title" data-i18n="volLabel">Громкость</div>
+        <input type="range" id="volumeRange" min="0" max="1" step="0.05" value="0.7">
+
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="soundStyle">🎵 Звук броска</div>
+        <select id="soundSelect" class="styled-select">
+            <optgroup label="Встроенные звуки" data-i18n-group="builtInSounds">
+                <option value="bubble" selected data-i18n="sndBubble">🫧 Бабл-гам (Пузырьки)</option>
+                <option value="dice" data-i18n="sndDice">🎲 Классические кубики</option>
+                <option value="roulette" data-i18n="sndRoulette">🎰 Колесо фортуны</option>
+                <option value="magic" data-i18n="sndMagic">✨ Магия (Колокольчики)</option>
+                <option value="retro" data-i18n="sndRetro">👾 8-бит Аркада</option>
+                <option value="space" data-i18n="sndSpace">🛸 Космический лазер</option>
+                <option value="mute" data-i18n="sndMute">🔇 Без звука</option>
+            </optgroup>
+            <optgroup label="Свой файл" data-i18n-group="customFileGroup">
+                <option value="upload_sound" data-i18n="uploadSoundOpt">📁 Загрузить свой звук...</option>
+            </optgroup>
+        </select>
+        <div class="resize-handle" data-resize-target="volumePopup" title="Resize">◢</div>
+    </div>
+
+    <!-- Окно 3: Палитра, Темы, Обводка и Свои фоны -->
+    <div class="popup-window" id="palettePopup" style="right: 20px;">
+        <div class="drag-header" data-drag-target="palettePopup">
+            <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="themeTitle">🎨 Темы и фон</span></div>
+            <button type="button" class="close-popup-btn" data-close="palettePopup">✕</button>
+        </div>
+        
+        <div class="popup-title" data-i18n="interfaceMode">Режим интерфейса</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <button type="button" class="speed-btn" id="darkModeBtn" style="font-size:0.82rem; padding: 10px;" data-i18n="darkBtn">🌙 Тёмный</button>
+            <button type="button" class="speed-btn" id="lightModeBtn" style="font-size:0.82rem; padding: 10px;" data-i18n="lightBtn">☀️ Светлый</button>
+        </div>
+
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="spaceTheme">🌌 Тема / Космос</div>
+        <select id="themeSelect" class="styled-select">
+            <optgroup label="Космические темы" data-i18n-group="spaceGroup">
+                <option value="space" data-i18n="thSpace">🌌 [🟣 Космос] Звезды</option>
+                <option value="saturn" data-i18n="thSaturn">🪐 [🟠 Сатурн] Планета</option>
+                <option value="neptune" data-i18n="thNeptune">🌊 [🔵 Нептун] Океан</option>
+            </optgroup>
+            <optgroup label="Неоновые & Кибер" data-i18n-group="neonGroup">
+                <option value="cyber" data-i18n="thCyber">⚡ [🟣 Киберпанк] Неон</option>
+                <option value="neon" data-i18n="thNeon">🟢 [🟢 Неон] Изумруд</option>
+                <option value="cyberarctic" data-i18n="thArctic">🧊 [🩵 Арктика] Лед</option>
+                <option value="pinkneon" data-i18n="thPink">💖 [🩷 Розовый] Клуб</option>
+            </optgroup>
+            <optgroup label="Природа & Атмосфера" data-i18n-group="natureGroup">
+                <option value="sunset" data-i18n="thSunset">🌅 [🟠 Закат] Градиент</option>
+                <option value="forest" data-i18n="thForest">🌲 [🟢 Лес] Мох</option>
+                <option value="fire" data-i18n="thFire">🔥 [🔴 Огонь] Жар</option>
+                <option value="gold" data-i18n="thGold">✨ [🟡 Золото] Нуар</option>
+            </optgroup>
+        </select>
+
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="borderTitle">✏️ Обводка кубиков</div>
+        <div class="border-colors-grid">
+            <div class="border-color-opt" style="background: #ffffff;" data-color="#ffffff" title="Белый"></div>
+            <div class="border-color-opt" style="background: #38bdf8;" data-color="#38bdf8" title="Голубой"></div>
+            <div class="border-color-opt" style="background: #facc15;" data-color="#facc15" title="Желтый"></div>
+            <div class="border-color-opt" style="background: #ef4444;" data-color="#ef4444" title="Красный"></div>
+            <div class="border-color-opt" style="background: #a855f7;" data-color="#a855f7" title="Фиолетовый"></div>
+            <div class="border-color-opt" style="background: #0f172a;" data-color="#0f172a" title="Темный"></div>
+        </div>
+
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="customBgsTitle">🖼️ Свои фоны</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <button type="button" class="speed-btn" id="uploadImgBtn" style="font-size:0.78rem; padding: 10px;" data-i18n="uploadImgBtn">🖼️ Картинка</button>
+            <button type="button" class="speed-btn" id="uploadVidBtn" style="font-size:0.78rem; padding: 10px;" data-i18n="uploadVidBtn">🎬 Видео</button>
+        </div>
+
+        <div class="resize-handle" data-resize-target="palettePopup" title="Resize">◢</div>
+    </div>
+
+    <!-- Скрытые файлы -->
+    <input type="file" id="soundInput" accept="audio/*">
+    <input type="file" id="bgImageInput" accept="image/*">
+    <input type="file" id="bgVideoInput" accept="video/*">
+
+    <!-- Главная карточка -->
+    <div class="main-card" id="mainCard">
+        <div class="main-drag-handle" data-drag-target="mainCard" title="Drag">
+            <div class="drag-pill"></div>
+            <h1><span class="header-icon">🎲</span> Color Dice</h1>
+            <div class="top-credit">
+                MADE BY <a href="https://www.tiktok.com/@groundoffc" target="_blank">GROUND</a>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="control-group">
+                <span class="control-label" data-i18n="diceCountLabel">🎲 Количество кубиков</span>
+                <select id="diceCountSelect" class="styled-select">
+                    <option value="1">1 кубик</option>
+                    <option value="2">2 кубика</option>
+                    <option value="3" selected>3 кубика</option>
+                    <option value="4">4 кубика</option>
+                    <option value="5">5 кубиков</option>
+                    <option value="6">6 кубиков</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label" data-i18n="animLabel">✨ Анимация финиша</span>
+                <select id="animSelect" class="styled-select">
+                    <option value="bounce" selected data-i18n="animBounce">🏀 Пружинка</option>
+                    <option value="spin" data-i18n="animSpin">🌀 Поворот 360°</option>
+                    <option value="flip" data-i18n="animFlip">🃏 Переворот 3D</option>
+                    <option value="drop" data-i18n="animDrop">⬇️ Падение сверху</option>
+                    <option value="flash" data-i18n="animFlash">⚡ Вспышка</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="combo-banner" id="comboBanner" data-i18n="comboBannerText">Собери 4+ одинаковых цвета для салюта! 🎉</div>
+
+        <div id="diceArena" class="dice-arena"></div>
+
+        <div class="buttons-wrapper">
+            <button type="button" id="rollBtn" data-i18n="rollBtnText">🎲 БРОСИТЬ !</button>
+
+            <div class="speed-buttons-grid">
+                <button type="button" id="fastRollBtn" class="speed-btn" data-i18n="fastBtn">⚡ Быстро</button>
+                <button type="button" id="slowRollBtn" class="speed-btn" data-i18n="slowBtn">🐢 Медленно</button>
+            </div>
+        </div>
+
+        <div class="resize-handle" data-resize-target="mainCard" title="Resize">◢</div>
+    </div>
+
+    <script>
+        // Двуязычный словарь (RU / EN)
+        const i18nText = {
+            ru: {
+                histTitle: "📜 История бросков",
+                histEmpty: "Бросков еще не было",
+                clearHist: "Очистить историю",
+                soundTitle: "🔊 Звук и микшер",
+                volLabel: "Громкость",
+                soundStyle: "🎵 Звук броска",
+                builtInSounds: "Встроенные звуки",
+                sndBubble: "🫧 Бабл-гам (Пузырьки)",
+                sndDice: "🎲 Классические кубики",
+                sndRoulette: "🎰 Колесо фортуны",
+                sndMagic: "✨ Магия (Колокольчики)",
+                sndRetro: "👾 8-бит Аркада",
+                sndSpace: "🛸 Космический лазер",
+                sndMute: "🔇 Без звука",
+                customFileGroup: "Свой файл",
+                uploadSoundOpt: "📁 Загрузить свой звук...",
+                themeTitle: "🎨 Темы и фон",
+                interfaceMode: "Режим интерфейса",
+                darkBtn: "🌙 Тёмный",
+                lightBtn: "☀️ Светлый",
+                spaceTheme: "🌌 Тема / Космос",
+                spaceGroup: "Космические темы",
+                thSpace: "🌌 [🟣 Космос] Звезды",
+                thSaturn: "🪐 [🟠 Сатурн] Планета",
+                thNeptune: "🌊 [🔵 Нептун] Океан",
+                neonGroup: "Неоновые & Кибер",
+                thCyber: "⚡ [🟣 Киберпанк] Неон",
+                thNeon: "🟢 [🟢 Неон] Изумруд",
+                thArctic: "🧊 [🩵 Арктика] Лед",
+                thPink: "💖 [🩷 Розовый] Клуб",
+                natureGroup: "Природа & Атмосфера",
+                thSunset: "🌅 [🟠 Закат] Градиент",
+                thForest: "🌲 [🟢 Лес] Мох",
+                thFire: "🔥 [🔴 Огонь] Жар",
+                thGold: "✨ [🟡 Золото] Нуар",
+                borderTitle: "✏️ Обводка кубиков",
+                customBgsTitle: "🖼️ Свои фоны",
+                uploadImgBtn: "🖼️ Картинка",
+                uploadVidBtn: "🎬 Видео",
+                diceCountLabel: "🎲 Количество кубиков",
+                animLabel: "✨ Анимация финиша",
+                animBounce: "🏀 Пружинка",
+                animSpin: "🌀 Поворот 360°",
+                animFlip: "🃏 Переворот 3D",
+                animDrop: "⬇️ Падение сверху",
+                animFlash: "⚡ Вспышка",
+                comboBannerText: "Собери 4+ одинаковых цвета для салюта! 🎉",
+                comboWinText: "🎉 ДЖЕКПОТ! Салют победы!",
+                rollBtnText: "🎲 БРОСИТЬ !",
+                fastBtn: "⚡ Быстро",
+                slowBtn: "🐢 Медленно",
+            },
+            en: {
+                histTitle: "📜 Roll History",
+                histEmpty: "No rolls yet",
+                clearHist: "Clear History",
+                soundTitle: "🔊 Sound & Mixer",
+                volLabel: "Volume",
+                soundStyle: "🎵 Roll Sound",
+                builtInSounds: "Built-in Sounds",
+                sndBubble: "🫧 Bubble Gum",
+                sndDice: "🎲 Classic Dice",
+                sndRoulette: "🎰 Fortune Wheel",
+                sndMagic: "✨ Magic Chimes",
+                sndRetro: "👾 8-Bit Arcade",
+                sndSpace: "🛸 Space Laser",
+                sndMute: "🔇 Mute",
+                customFileGroup: "Custom File",
+                uploadSoundOpt: "📁 Upload Custom Sound...",
+                themeTitle: "🎨 Themes & Backgrounds",
+                interfaceMode: "Interface Mode",
+                darkBtn: "🌙 Dark",
+                lightBtn: "☀️ Light",
+                spaceTheme: "🌌 Theme / Space",
+                spaceGroup: "Space Themes",
+                thSpace: "🌌 [🟣 Space] Stars",
+                thSaturn: "🪐 [🟠 Saturn] Planet",
+                thNeptune: "🌊 [🔵 Neptune] Ocean",
+                neonGroup: "Neon & Cyber",
+                thCyber: "⚡ [🟣 Cyber] Neon",
+                thNeon: "🟢 [🟢 Neon] Emerald",
+                thArctic: "🧊 [🩵 Arctic] Ice",
+                thPink: "💖 [🩷 Pink] Club",
+                natureGroup: "Nature & Atmosphere",
+                thSunset: "🌅 [🟠 Sunset] Gradient",
+                thForest: "🌲 [🟢 Forest] Moss",
+                thFire: "🔥 [🔴 Fire] Heat",
+                thGold: "✨ [🟡 Gold] Noir",
+                borderTitle: "✏️ Dice Border",
+                customBgsTitle: "🖼️ Custom Backgrounds",
+                uploadImgBtn: "🖼️ Image",
+                uploadVidBtn: "🎬 Video",
+                diceCountLabel: "🎲 Dice Count",
+                animLabel: "✨ Finish Animation",
+                animBounce: "🏀 Bounce",
+                animSpin: "🌀 Spin 360°",
+                animFlip: "🃏 3D Flip",
+                animDrop: "⬇️ Drop down",
+                animFlash: "⚡ Flash",
+                comboBannerText: "Collect 4+ matching colors for fireworks! 🎉",
+                comboWinText: "🎉 JACKPOT! Victory fireworks!",
+                rollBtnText: "🎲 ROLL !",
+                fastBtn: "⚡ Fast",
+                slowBtn: "🐢 Slow",
+            }
+        };
+
+        let currentLang = 'ru';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18nText[lang][key]) el.textContent = i18nText[lang][key];
+            });
+            updateComboBannerText(false);
+            renderHistoryList();
+        }
+
+        const diceColors = [
+            { name: 'КРАСНЫЙ',    hex: '#ef4444' },
+            { name: 'ОРАНЖЕВЫЙ',  hex: '#f97316' },
+            { name: 'ЖЕЛТЫЙ',     hex: '#eab308' },
+            { name: 'ЗЕЛЕНЫЙ',    hex: '#22c55e' },
+            { name: 'СИНИЙ',      hex: '#3b82f6' },
+            { name: 'ФИОЛЕТОВЫЙ', hex: '#a855f7' }
+        ];
+
+        const mainCard = document.getElementById('mainCard');
+        const diceArena = document.getElementById('diceArena');
+        const diceCountSelect = document.getElementById('diceCountSelect');
+        const animSelect = document.getElementById('animSelect');
+        const soundSelect = document.getElementById('soundSelect');
+        const rollBtn = document.getElementById('rollBtn');
+        const fastRollBtn = document.getElementById('fastRollBtn');
+        const slowRollBtn = document.getElementById('slowRollBtn');
+        const comboBanner = document.getElementById('comboBanner');
+        const themeSelect = document.getElementById('themeSelect');
+        const soundInput = document.getElementById('soundInput');
+        const volumeRange = document.getElementById('volumeRange');
+
+        const historyToggleBtn = document.getElementById('historyToggleBtn');
+        const historyPopup = document.getElementById('historyPopup');
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+        const volumeToggleBtn = document.getElementById('volumeToggleBtn');
+        const volumePopup = document.getElementById('volumePopup');
+        const paletteToggleBtn = document.getElementById('paletteToggleBtn');
+        const palettePopup = document.getElementById('palettePopup');
+        const langToggleBtn = document.getElementById('langToggleBtn');
+        
+        const darkModeBtn = document.getElementById('darkModeBtn');
+        const lightModeBtn = document.getElementById('lightModeBtn');
+
+        const bgVideo = document.getElementById('bgVideo');
+        const bgImageInput = document.getElementById('bgImageInput');
+        const bgVideoInput = document.getElementById('bgVideoInput');
+        const uploadImgBtn = document.getElementById('uploadImgBtn');
+        const uploadVidBtn = document.getElementById('uploadVidBtn');
+
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        let confettiParticles = [];
+        let confettiAnimationId = null;
+
+        let customAudio = null;
+        let customAudioUrl = null;
+        let audioCtx = null;
+        let activeOscillators = [];
+        let stopSoundTimeout = null;
+        let activeTimers = [];
+        let activeIntervals = [];
+        let currentRollId = 0;
+        let lastValidSound = 'bubble';
+        let rollHistory = [];
+        let topZIndex = 65;
+
+        // Переключение Темы (Тёмная / Светлая)
+        function setThemeMode(mode) {
+            document.documentElement.setAttribute('data-theme', mode);
+            if (mode === 'dark') {
+                darkModeBtn.classList.add('btn-active-mode');
+                lightModeBtn.classList.remove('btn-active-mode');
+            } else {
+                lightModeBtn.classList.add('btn-active-mode');
+                darkModeBtn.classList.remove('btn-active-mode');
+            }
+        }
+        darkModeBtn.addEventListener('click', () => setThemeMode('dark'));
+        lightModeBtn.addEventListener('click', () => setThemeMode('light'));
+        setThemeMode('dark');
+
+        // Смена обводки кубиков
+        document.querySelectorAll('.border-color-opt').forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                const color = e.target.getAttribute('data-color');
+                document.documentElement.style.setProperty('--dice-border', color);
+                document.documentElement.style.setProperty('--dice-border-width', '3.5px');
+            });
+        });
+
+        // Переключение языка
+        langToggleBtn.addEventListener('click', () => {
+            setLanguage(currentLang === 'ru' ? 'en' : 'ru');
+        });
+
+        // Управление фоновыми темами
+        const themesConfig = {
+            space: 'radial-gradient(circle at center, #1e1b4b 0%, #060913 100%)',
+            saturn: 'radial-gradient(circle at center, #7c2d12 0%, #180902 100%)',
+            neptune: 'radial-gradient(circle at center, #0c4a6e 0%, #020617 100%)',
+            cyber: 'radial-gradient(circle at center, #4c1d95 0%, #090214 100%)',
+            neon: 'radial-gradient(circle at center, #065f46 0%, #02140d 100%)',
+            cyberarctic: 'radial-gradient(circle at center, #0e7490 0%, #020b14 100%)',
+            pinkneon: 'radial-gradient(circle at center, #831843 0%, #14020a 100%)',
+            sunset: 'linear-gradient(135deg, #c2410c 0%, #7c2d12 50%, #1e1b4b 100%)',
+            forest: 'linear-gradient(135deg, #14532d 0%, #064e3b 50%, #022c22 100%)',
+            fire: 'linear-gradient(135deg, #991b1b 0%, #7c2d12 50%, #450a0a 100%)',
+            gold: 'linear-gradient(135deg, #854d0e 0%, #422006 100%)'
+        };
+
+        function applyTheme(themeName) {
+            bgVideo.style.display = 'none';
+            bgVideo.pause();
+            if (themesConfig[themeName]) {
+                document.body.style.background = themesConfig[themeName];
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundAttachment = 'fixed';
+            }
+        }
+        themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
+        applyTheme('space');
+
+        // Кнопки загрузки файлов фонов
+        uploadImgBtn.addEventListener('click', () => bgImageInput.click());
+        uploadVidBtn.addEventListener('click', () => bgVideoInput.click());
+
+        bgImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                bgVideo.style.display = 'none';
+                bgVideo.pause();
+                document.body.style.background = `url('${url}') no-repeat center center fixed`;
+                document.body.style.backgroundSize = 'cover';
+            }
+        });
+
+        bgVideoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                bgVideo.src = url;
+                bgVideo.style.display = 'block';
+                bgVideo.play().catch(err => console.log(err));
+            }
+        });
+
+        // Загрузка своего звука
+        soundSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'upload_sound') {
+                soundInput.click();
+            } else if (e.target.value !== 'mute') {
+                lastValidSound = e.target.value;
+            }
+        });
+
+        soundInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (customAudioUrl) URL.revokeObjectURL(customAudioUrl);
+                customAudioUrl = URL.createObjectURL(file);
+                customAudio = new Audio(customAudioUrl);
+                
+                let optGroup = document.getElementById('customSoundGroup');
+                if (!optGroup) {
+                    optGroup = document.createElement('optgroup');
+                    optGroup.id = 'customSoundGroup';
+                    optGroup.label = currentLang === 'ru' ? 'Свой файл' : 'Custom File';
+                    soundSelect.appendChild(optGroup);
+                } else {
+                    optGroup.innerHTML = '';
+                }
+                const newOpt = document.createElement('option');
+                newOpt.value = 'custom';
+                newOpt.textContent = '📁 ' + file.name;
+                optGroup.appendChild(newOpt);
+                soundSelect.value = 'custom';
+            } else {
+                soundSelect.value = lastValidSound;
+            }
+        });
+
+        // Управление звуком через Web Audio API
+        function initAudioCtx() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            initAudioCtx();
+            const volume = parseFloat(volumeRange.value);
+            if (volume <= 0 || type === 'mute') return;
+
+            if (type === 'custom' && customAudio) {
+                customAudio.currentTime = 0;
+                customAudio.volume = volume;
+                customAudio.play().catch(() => {});
+                return;
+            }
+
+            stopCurrentSound();
+
+            const now = audioCtx.currentTime;
+            const masterGain = audioCtx.createGain();
+            masterGain.gain.setValueAtTime(volume, now);
+            masterGain.connect(audioCtx.destination);
+
+            if (type === 'bubble') {
+                let freqs = [350, 480, 650, 850];
+                freqs.forEach((f, i) => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    let startTime = now + i * 0.05;
+                    osc.frequency.setValueAtTime(f, startTime);
+                    osc.frequency.exponentialRampToValueAtTime(f * 1.5, startTime + 0.08);
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.4, startTime + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.12);
+                    activeOscillators.push(osc);
+                });
+            } else if (type === 'dice') {
+                for (let i = 0; i < 5; i++) {
+                    let startTime = now + i * 0.07;
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(120 + Math.random() * 80, startTime);
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.06);
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.08);
+                    activeOscillators.push(osc);
+                }
+            } else if (type === 'roulette') {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.4);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start(now);
+                osc.stop(now + 0.45);
+                activeOscillators.push(osc);
+            } else if (type === 'magic') {
+                let notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    let startTime = now + idx * 0.06;
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, startTime);
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.3, startTime + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.25);
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.28);
+                    activeOscillators.push(osc);
+                });
+            } else if (type === 'retro') {
+                let notes = [220, 440, 330, 660];
+                notes.forEach((freq, idx) => {
+                    let startTime = now + idx * 0.05;
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(freq, startTime);
+                    gain.gain.setValueAtTime(0.2, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.07);
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.08);
+                    activeOscillators.push(osc);
+                });
+            } else if (type === 'space') {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(900, now);
+                osc.frequency.exponentialRampToValueAtTime(150, now + 0.35);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start(now);
+                osc.stop(now + 0.4);
+                activeOscillators.push(osc);
+            }
+        }
+
+        function stopCurrentSound() {
+            if (stopSoundTimeout) clearTimeout(stopSoundTimeout);
+            activeOscillators.forEach(osc => {
+                try { osc.stop(); } catch(e) {}
+            });
+            activeOscillators = [];
+        }
+
+        // Рендер кубиков на арене
+        let currentDiceResults = [];
+
+        function renderDice(results = null) {
+            diceArena.innerHTML = '';
+            const count = parseInt(diceCountSelect.value);
+            currentDiceResults = [];
+
+            let size = count <= 3 ? 82 : (count <= 4 ? 72 : 62);
+            diceArena.style.setProperty('--dice-size', size + 'px');
+
+            for (let i = 0; i < count; i++) {
+                const dice = document.createElement('div');
+                dice.className = 'dice';
+                
+                let colorObj = results && results[i] ? results[i] : diceColors[Math.floor(Math.random() * diceColors.length)];
+                currentDiceResults.push(colorObj);
+
+                dice.style.backgroundColor = colorObj.hex;
+                
+                const dot = document.createElement('div');
+                dot.className = 'dice-dot';
+                dice.appendChild(dot);
+                
+                diceArena.appendChild(dice);
+            }
+        }
+
+        diceCountSelect.addEventListener('change', () => renderDice());
+        renderDice();
+
+        // Анимация салюта (конфетти)
+        function triggerConfetti() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            confettiParticles = [];
+
+            for (let i = 0; i < 120; i++) {
+                confettiParticles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 16,
+                    vy: (Math.random() - 0.5) * 16 - 4,
+                    color: diceColors[Math.floor(Math.random() * diceColors.length)].hex,
+                    size: Math.random() * 8 + 4,
+                    rotation: Math.random() * 360,
+                    vRot: (Math.random() - 0.5) * 15,
+                    alpha: 1
+                });
+            }
+
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let activeCount = 0;
+
+            confettiParticles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.4;
+                p.rotation += p.vRot;
+                p.alpha -= 0.012;
+
+                if (p.alpha > 0) {
+                    activeCount++;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+                }
+            });
+
+            if (activeCount > 0) {
+                confettiAnimationId = requestAnimationFrame(animateConfetti);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function updateComboBannerText(isWin) {
+            if (isWin) {
+                comboBanner.textContent = i18nText[currentLang].comboWinText;
+                comboBanner.classList.add('win');
+                mainCard.classList.add('jackpot-glow');
+            } else {
+                comboBanner.textContent = i18nText[currentLang].comboBannerText;
+                comboBanner.classList.remove('win');
+                mainCard.classList.remove('jackpot-glow');
+            }
+        }
+
+        // Бросок кубиков
+        function rollDice(durationMs = 450) {
+            currentRollId++;
+            const rollId = currentRollId;
+
+            activeTimers.forEach(t => clearTimeout(t));
+            activeIntervals.forEach(i => clearInterval(i));
+            activeTimers = [];
+            activeIntervals = [];
+
+            playSound(soundSelect.value);
+
+            const diceElements = diceArena.querySelectorAll('.dice');
+            diceElements.forEach(d => {
+                d.classList.add('rolling');
+                d.style.setProperty('--anim-dur', (durationMs / 1000) + 's');
+            });
+
+            const intervalId = setInterval(() => {
+                if (rollId !== currentRollId) return;
+                diceElements.forEach(d => {
+                    const randColor = diceColors[Math.floor(Math.random() * diceColors.length)];
+                    d.style.backgroundColor = randColor.hex;
+                });
+            }, 70);
+            activeIntervals.push(intervalId);
+
+            const timerId = setTimeout(() => {
+                if (rollId !== currentRollId) return;
+                clearInterval(intervalId);
+
+                const finalResults = [];
+                const animType = animSelect.value;
+
+                diceElements.forEach((d) => {
+                    d.classList.remove('rolling');
+                    const colorObj = diceColors[Math.floor(Math.random() * diceColors.length)];
+                    finalResults.push(colorObj);
+
+                    d.style.backgroundColor = colorObj.hex;
+                    d.classList.remove('anim-bounce', 'anim-spin', 'anim-flip', 'anim-drop', 'anim-flash');
+                    void d.offsetWidth;
+                    d.classList.add('anim-' + animType);
+                });
+
+                currentDiceResults = finalResults;
+
+                const counts = {};
+                finalResults.forEach(c => {
+                    counts[c.hex] = (counts[c.hex] || 0) + 1;
+                });
+                let maxMatch = Math.max(...Object.values(counts));
+
+                if (maxMatch >= 4) {
+                    updateComboBannerText(true);
+                    triggerConfetti();
+                } else {
+                    updateComboBannerText(false);
+                }
+
+                addToHistory(finalResults, maxMatch >= 4);
+
+            }, durationMs);
+            activeTimers.push(timerId);
+        }
+
+        rollBtn.addEventListener('click', () => rollDice(450));
+        fastRollBtn.addEventListener('click', () => rollDice(200));
+        slowRollBtn.addEventListener('click', () => rollDice(900));
+
+        // История бросков
+        function addToHistory(results, isCombo) {
+            if (rollHistory.length === 0) {
+                historyList.innerHTML = '';
+            }
+
+            rollHistory.unshift({ results: [...results], isCombo });
+            if (rollHistory.length > 15) rollHistory.pop();
+
+            renderHistoryList();
+        }
+
+        function renderHistoryList() {
+            historyList.innerHTML = '';
+            if (rollHistory.length === 0) {
+                historyList.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 10px;">${i18nText[currentLang].histEmpty}</div>`;
+                return;
+            }
+
+            rollHistory.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `history-item ${item.isCombo ? 'combo-hit' : ''}`;
+                
+                const colorsDiv = document.createElement('div');
+                colorsDiv.className = 'history-colors';
+                
+                item.results.forEach(c => {
+                    const dot = document.createElement('div');
+                    dot.className = 'history-dot';
+                    dot.style.backgroundColor = c.hex;
+                    colorsDiv.appendChild(dot);
+                });
+
+                div.appendChild(colorsDiv);
+
+                if (item.isCombo) {
+                    const badge = document.createElement('span');
+                    badge.className = 'history-badge';
+                    badge.textContent = '🎉 JACKPOT';
+                    div.appendChild(badge);
+                }
+
+                historyList.appendChild(div);
+            });
+        }
+
+        clearHistoryBtn.addEventListener('click', () => {
+            rollHistory = [];
+            renderHistoryList();
+        });
+
+        // Открытие и закрытие модальных окон
+        function openPopup(popup) {
+            topZIndex++;
+            popup.style.zIndex = topZIndex;
+            popup.classList.add('open');
+        }
+
+        historyToggleBtn.addEventListener('click', () => {
+            if (historyPopup.classList.contains('open')) historyPopup.classList.remove('open');
+            else openPopup(historyPopup);
+        });
+
+        volumeToggleBtn.addEventListener('click', () => {
+            if (volumePopup.classList.contains('open')) volumePopup.classList.remove('open');
+            else openPopup(volumePopup);
+        });
+
+        paletteToggleBtn.addEventListener('click', () => {
+            if (palettePopup.classList.contains('open')) palettePopup.classList.remove('open');
+            else openPopup(palettePopup);
+        });
+
+        document.querySelectorAll('.close-popup-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const targetId = e.target.getAttribute('data-close');
+                document.getElementById(targetId).classList.remove('open');
+            });
+        });
+
+        // Перетаскивание (Drag & Drop) и Изменение размера (Resize)
+        let activeDrag = null;
+        let dragOffset = { x: 0, y: 0 };
+        let activeResize = null;
+        let resizeStart = { w: 0, h: 0, x: 0, y: 0 };
+
+        document.addEventListener('mousedown', (e) => {
+            const dragHeader = e.target.closest('[data-drag-target]');
+            if (dragHeader) {
+                const targetId = dragHeader.getAttribute('data-drag-target');
+                activeDrag = document.getElementById(targetId);
+                topZIndex++;
+                activeDrag.style.zIndex = topZIndex;
+                const rect = activeDrag.getBoundingClientRect();
+                dragOffset.x = e.clientX - rect.left;
+                dragOffset.y = e.clientY - rect.top;
+                e.preventDefault();
+            }
+
+            const resizeHandle = e.target.closest('[data-resize-target]');
+            if (resizeHandle) {
+                const targetId = resizeHandle.getAttribute('data-resize-target');
+                activeResize = document.getElementById(targetId);
+                topZIndex++;
+                activeResize.style.zIndex = topZIndex;
+                const rect = activeResize.getBoundingClientRect();
+                resizeStart.w = rect.width;
+                resizeStart.h = rect.height;
+                resizeStart.x = e.clientX;
+                resizeStart.y = e.clientY;
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (activeDrag) {
+                let x = e.clientX - dragOffset.x;
+                let y = e.clientY - dragOffset.y;
+                activeDrag.style.left = x + 'px';
+                activeDrag.style.top = y + 'px';
+                activeDrag.style.right = 'auto';
+                activeDrag.style.bottom = 'auto';
+            }
+
+            if (activeResize) {
+                let w = resizeStart.w + (e.clientX - resizeStart.x);
+                let h = resizeStart.h + (e.clientY - resizeStart.y);
+                activeResize.style.width = Math.max(260, w) + 'px';
+                activeResize.style.height = Math.max(200, h) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            activeDrag = null;
+            activeResize = null;
+        });
+
+        // Сброс позиций и размеров
+        document.getElementById('resetPosBtn').addEventListener('click', () => {
+            [mainCard, historyPopup, volumePopup, palettePopup].forEach(el => {
+                el.style.left = '';
+                el.style.top = '';
+                el.style.right = '';
+                el.style.bottom = '';
+                el.style.width = '';
+                el.style.height = '';
+            });
+            historyPopup.style.right = '202px';
+            volumePopup.style.right = '140px';
+            palettePopup.style.right = '20px';
+        });
+
+        // Первый бросок при старте
+        rollDice(300);
+    </script>
+</body>
+</html>
