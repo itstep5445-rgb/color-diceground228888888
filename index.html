@@ -25,7 +25,7 @@
             --top-btn-border: rgba(255, 255, 255, 0.16);
             --pill-bg: rgba(255, 255, 255, 0.2);
             --dot-shadow: rgba(0, 0, 0, 0.3);
-            --main-card-border: rgba(255, 255, 255, 0.18);
+            --main-card-border: #38bdf8;
             --roll-btn-bg: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
             --roll-btn-shadow: rgba(99, 102, 241, 0.45);
         }
@@ -50,7 +50,7 @@
             --top-btn-border: rgba(0, 0, 0, 0.12);
             --pill-bg: rgba(0, 0, 0, 0.15);
             --dot-shadow: rgba(0, 0, 0, 0.1);
-            --main-card-border: rgba(0, 0, 0, 0.14);
+            --main-card-border: #3b82f6;
             --roll-btn-bg: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
             --roll-btn-shadow: rgba(99, 102, 241, 0.3);
         }
@@ -210,6 +210,43 @@
             display: flex;
         }
 
+        /* RGB / Пиксельный выбор цвета */
+        .rgb-picker-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--select-bg);
+            border: 1px solid var(--select-border);
+            padding: 8px 12px;
+            border-radius: 14px;
+            gap: 10px;
+        }
+
+        .rgb-picker-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .rgb-color-input {
+            -webkit-appearance: none;
+            border: none;
+            width: 38px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: none;
+        }
+
+        .rgb-color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .rgb-color-input::-webkit-color-swatch {
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 8px;
+        }
+
         /* Плавающие окна для пользовательских картинок */
         .floating-image-window {
             position: fixed;
@@ -312,7 +349,7 @@
             max-width: 95vw;
             max-height: 92vh;
             background: var(--card-bg);
-            border: 3px solid var(--main-card-border);
+            border: 3.5px solid var(--main-card-border);
             border-radius: 36px;
             padding: 24px 32px 30px;
             box-shadow: 0 40px 90px var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -719,26 +756,6 @@
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
         }
 
-        .palette-colors-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 6px;
-            margin-top: 4px;
-        }
-
-        .palette-color-opt {
-            height: 26px;
-            border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.3);
-            cursor: pointer;
-            transition: transform 0.15s, border-color 0.15s;
-        }
-
-        .palette-color-opt:hover {
-            transform: scale(1.12);
-            border-color: #fff;
-        }
-
         input[type="file"] { display: none; }
     </style>
 </head>
@@ -800,7 +817,7 @@
         <div class="resize-handle" data-resize-target="volumePopup" title="Resize">◢</div>
     </div>
 
-    <!-- Окно 3: Палитра, Темы и Настройки Дизайна (Все на одном уровне) -->
+    <!-- Окно 3: Темы, RGB выбор цвета обводки и кнопки -->
     <div class="popup-window" id="palettePopup" style="right: 20px;">
         <div class="drag-header" data-drag-target="palettePopup">
             <div class="popup-title"><span class="drag-dots">⋮⋮</span> <span data-i18n="themeTitle">🎨 Темы и дизайн</span></div>
@@ -835,26 +852,18 @@
             </optgroup>
         </select>
 
-        <!-- 2. Отдельная Палитра: Обводка Карточки -->
-        <div class="popup-title" style="margin-top: 4px;" data-i18n="cardBorderTitle">✏️ Обводка карточки (отдельно)</div>
-        <div class="palette-colors-grid" id="cardBorderPalette">
-            <div class="palette-color-opt" style="background: rgba(255,255,255,0.3);" data-color="rgba(255,255,255,0.2)" title="Стандарт"></div>
-            <div class="palette-color-opt" style="background: #38bdf8;" data-color="#38bdf8" title="Голубой"></div>
-            <div class="palette-color-opt" style="background: #facc15;" data-color="#facc15" title="Желтый"></div>
-            <div class="palette-color-opt" style="background: #ef4444;" data-color="#ef4444" title="Красный"></div>
-            <div class="palette-color-opt" style="background: #a855f7;" data-color="#a855f7" title="Фиолетовый"></div>
-            <div class="palette-color-opt" style="background: #22c55e;" data-color="#22c55e" title="Зеленый"></div>
+        <!-- 2. Пиксель / RGB выбор: Обводка Карточки -->
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="cardBorderTitle">✏️ Обводка карточки (RGB)</div>
+        <div class="rgb-picker-row">
+            <span class="rgb-picker-label" data-i18n="pickColorText">Выбрать цвет обводки</span>
+            <input type="color" id="cardBorderColorPicker" class="rgb-color-input" value="#38bdf8">
         </div>
 
-        <!-- 3. Отдельная Палитра: Кнопка Бросить -->
-        <div class="popup-title" style="margin-top: 4px;" data-i18n="rollBtnPaletteTitle">🔘 Кнопка «Бросить» (отдельно)</div>
-        <div class="palette-colors-grid" id="rollBtnPalette">
-            <div class="palette-color-opt" style="background: #6366f1;" data-color="linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%)" data-shadow="rgba(99, 102, 241, 0.45)" title="Индиго"></div>
-            <div class="palette-color-opt" style="background: #06b6d4;" data-color="linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)" data-shadow="rgba(6, 182, 212, 0.45)" title="Циан"></div>
-            <div class="palette-color-opt" style="background: #22c55e;" data-color="linear-gradient(135deg, #22c55e 0%, #15803d 100%)" data-shadow="rgba(34, 197, 94, 0.45)" title="Зеленый"></div>
-            <div class="palette-color-opt" style="background: #ef4444;" data-color="linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)" data-shadow="rgba(239, 68, 68, 0.45)" title="Красный"></div>
-            <div class="palette-color-opt" style="background: #a855f7;" data-color="linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)" data-shadow="rgba(168, 85, 247, 0.45)" title="Фиолетовый"></div>
-            <div class="palette-color-opt" style="background: #f59e0b;" data-color="linear-gradient(135deg, #f59e0b 0%, #b45309 100%)" data-shadow="rgba(245, 158, 11, 0.45)" title="Янтарный"></div>
+        <!-- 3. Пиксель / RGB выбор: Кнопка Бросить -->
+        <div class="popup-title" style="margin-top: 4px;" data-i18n="rollBtnPaletteTitle">🔘 Кнопка «Бросить» (RGB)</div>
+        <div class="rgb-picker-row">
+            <span class="rgb-picker-label" data-i18n="pickBtnColorText">Выбрать цвет кнопки</span>
+            <input type="color" id="rollBtnColorPicker" class="rgb-color-input" value="#6366f1">
         </div>
 
         <div class="popup-title" style="margin-top: 4px;" data-i18n="customBgsTitle">🖼️ Свои файлы фона</div>
@@ -961,8 +970,10 @@
                 thForest: "🌲 [🟢 Лес] Мох",
                 thFire: "🔥 [🔴 Огонь] Жар",
                 thGold: "✨ [🟡 Золото] Нуар",
-                cardBorderTitle: "✏️ Обводка карточки (отдельно)",
-                rollBtnPaletteTitle: "🔘 Кнопка «Бросить» (отдельно)",
+                cardBorderTitle: "✏️ Обводка карточки (RGB)",
+                rollBtnPaletteTitle: "🔘 Кнопка «Бросить» (RGB)",
+                pickColorText: "Выбрать цвет обводки",
+                pickBtnColorText: "Выбрать цвет кнопки",
                 customBgsTitle: "🖼️ Свои файлы фона",
                 uploadImgBtn: "🖼️ Картинка",
                 uploadVidBtn: "🎬 Видео",
@@ -1016,8 +1027,10 @@
                 thForest: "🌲 [🟢 Forest] Moss",
                 thFire: "🔥 [🔴 Fire] Heat",
                 thGold: "✨ [🟡 Gold] Noir",
-                cardBorderTitle: "✏️ Card Border (separate)",
-                rollBtnPaletteTitle: "🔘 Roll Button (separate)",
+                cardBorderTitle: "✏️ Card Border (RGB)",
+                rollBtnPaletteTitle: "🔘 Roll Button (RGB)",
+                pickColorText: "Pick border color",
+                pickBtnColorText: "Pick button color",
                 customBgsTitle: "🖼️ Custom Backgrounds",
                 uploadImgBtn: "🖼️ Image",
                 uploadVidBtn: "🎬 Video",
@@ -1075,6 +1088,9 @@
         const soundInput = document.getElementById('soundInput');
         const volumeRange = document.getElementById('volumeRange');
 
+        const cardBorderColorPicker = document.getElementById('cardBorderColorPicker');
+        const rollBtnColorPicker = document.getElementById('rollBtnColorPicker');
+
         const historyToggleBtn = document.getElementById('historyToggleBtn');
         const historyPopup = document.getElementById('historyPopup');
         const historyList = document.getElementById('historyList');
@@ -1130,23 +1146,18 @@
         lightModeBtn.addEventListener('click', () => setThemeMode('light'));
         setThemeMode('dark');
 
-        // Отдельный выбор цвета обводки карточки
-        document.querySelectorAll('#cardBorderPalette .palette-color-opt').forEach(opt => {
-            opt.addEventListener('click', (e) => {
-                const color = e.target.getAttribute('data-color');
-                document.documentElement.style.setProperty('--main-card-border', color);
-                mainCard.style.boxShadow = `0 40px 90px var(--card-shadow), 0 0 30px ${color}`;
-            });
+        // RGB / Пиксельный выбор цвета обводки карточки
+        cardBorderColorPicker.addEventListener('input', (e) => {
+            const hex = e.target.value;
+            document.documentElement.style.setProperty('--main-card-border', hex);
+            mainCard.style.boxShadow = `0 40px 90px var(--card-shadow), 0 0 30px ${hex}`;
         });
 
-        // Отдельный выбор цвета кнопки «Бросить»
-        document.querySelectorAll('#rollBtnPalette .palette-color-opt').forEach(opt => {
-            opt.addEventListener('click', (e) => {
-                const bgGrad = e.target.getAttribute('data-color');
-                const shadow = e.target.getAttribute('data-shadow');
-                document.documentElement.style.setProperty('--roll-btn-bg', bgGrad);
-                document.documentElement.style.setProperty('--roll-btn-shadow', shadow);
-            });
+        // RGB / Пиксельный выбор цвета кнопки «Бросить»
+        rollBtnColorPicker.addEventListener('input', (e) => {
+            const hex = e.target.value;
+            document.documentElement.style.setProperty('--roll-btn-bg', hex);
+            document.documentElement.style.setProperty('--roll-btn-shadow', hex + '77');
         });
 
         langToggleBtn.addEventListener('click', () => {
